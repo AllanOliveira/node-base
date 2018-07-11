@@ -16,6 +16,7 @@ api.buscaPorId =
                         foto => foto._id == req.params.id)
                  );
 
+// Ação de remover da api
 api.removePorId =
     (req,res) => {
         console.log(req.params.id);
@@ -23,6 +24,7 @@ api.removePorId =
         res.sendStatus(204);
     }
 
+//Ação de adicionar
 api.incluir = 
     (req,res) => {
         let foto = req.body;
@@ -33,6 +35,7 @@ api.incluir =
         res.json(foto);
     }
 
+//Ação de atualizar
 api.atualiza =
     (req,res) => {
         let newFoto = req.body;
