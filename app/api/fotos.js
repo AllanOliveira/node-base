@@ -1,5 +1,6 @@
 var api = {};
 
+//ação de listar da api - ela retorna um json correspondente a lista de fotos
 api.listar = (req,res)=>{
     let fotos = [
         {_id:01,titulo:"Leão",url:"http://www.fundosanimais.com/Minis/leoes.jpg"},
@@ -8,5 +9,5 @@ api.listar = (req,res)=>{
     res.json(fotos);
 }
 
-
+// api tem que ser exposta para ser utilizavel
 module.exports = api;
