@@ -7,7 +7,8 @@ app.use(express.static('./static')); //carrega a pasta static como conteudo esta
 app.use(bodyParse.json()); // configurando o express para utilizar o bodyParse
 
 consign({cwd:'app'})//Executa o consign setando como pasta raiz a pasta app
-    .include('api')//Inclui a pasta api como dependencia
+    .include('models')//Inclui a pasta comm os models configurados para o mongodb
+    .then('api')//Inclui a pasta api como dependencia
     .then('routes')//Inclui a pasta routes como dependencia, mas depois da inclusao da pasta anterior(no caso api)
     .into(app);//diz para o consig a onde ele deve incuir essas dependencias, no caso na variavel app(express)
 

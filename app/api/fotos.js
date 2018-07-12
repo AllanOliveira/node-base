@@ -1,53 +1,74 @@
-var api = {};
+var mongoose = require('mongoose');
 
-var cont = 2;
+module.exports = (app) => {
 
-var fotos = [
-    {_id:01,titulo:"Leão",url:"http://www.fundosanimais.com/Minis/leoes.jpg"},
-    {_id:02,titulo:"Águia",url:"http://www.fundosanimais.com/Minis/aterragem-aguia.jpg"}
-];
+    var model = mongoose.model('Foto');
+    var api = {};
 
-//ação de listar da api - ela retorna um json correspondente a lista de fotos
-api.listar = (req,res) => res.json(fotos);
+    //ação de listar da api - ela retorna um json correspondente a lista de fotos
+    api.listar = (req,res) => {
+        model.find( (error,fotos) => {
 
-api.buscaPorId = 
-    (req,res) => res.json(
-                    fotos.find(
-                        foto => foto._id == req.params.id)
-                 );
+            if(error){
+                console.log(error);
+                res.status(500).json(error);
+            }
 
-// Ação de remover da api
-api.removePorId =
-    (req,res) => {
-        console.log(req.params.id);
-        fotos = fotos.filter(foto => foto._id != req.params.id);
-        res.sendStatus(204);
-    }
+            res.json(fotos);
+        });
+    };
 
-//Ação de adicionar
-api.incluir = 
-    (req,res) => {
-        let foto = req.body;
+    //ação de buscar por id
+    api.buscaPorId = (req,res) => {
+        model
+            .findById(req.params.id)
+            .then( 
+                foto => res.json(foto),
+                error => {
+                    console.log(error.stack);
+                    res.status(500).json(error)
+                }
+            );
+    };
 
-        foto._id = ++cont;
-        fotos.push(foto);
+    // Ação de remover da api
+    api.removePorId =(req,res) => {
+        model
+            .remove({'_id':req.params.id})
+            .then(
+                ()=> res.sendStatus(200),
+                error => {
+                    console.log(error.stack);
+                    res.status(500).json(error);
+                }
+            );
+    };
 
-        res.json(foto);
-    }
+    //Ação de adicionar
+    api.incluir = (req,res) => {
+        model
+            .create(req.body)
+            .then( foto => res.json(foto))
+            .catch(error => {
+                console.log(error);
+                res.sendStatus(500);
+            });
+    };
 
-//Ação de atualizar
-api.atualiza =
-    (req,res) => {
-        let newFoto = req.body;
+    //Ação de atualizar
+    api.atualiza = (req,res) => {
+        model
+            .findByIdAndUpdate(req.params.id,req.body,{new:true})
+            .then( 
+                foto => res.json(foto),
+                error => {
+                    console.log(error.stack);
+                    res.status(500).json(error);
+                }
+            );
+    };
 
-        let index = fotos.findIndex(
-            foto => foto._id == req.params.id
-        );
+    // api tem que ser exposta para ser utilizavel
+    return api;
 
-        fotos[index] = newFoto;
-
-        res.sendStatus(200);
-    }
-
-// api tem que ser exposta para ser utilizavel
-module.exports = api;
+};
