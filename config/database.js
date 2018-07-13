@@ -19,5 +19,5 @@ module.exports = (uri) => { //recebemos a uri para manter a url de conexão din�
             console.log('Aplicação terminada, conexão fechada!');
             process.exit(0);
         });
-    })
+    });
 }

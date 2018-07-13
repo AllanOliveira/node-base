@@ -1,5 +1,5 @@
-var http = require('http'); // importa o modulo http
-var app = require('./config/express');// importa o express configurado
+var http = require('http');//importa o modulo http
+var app = require('./config/express');//importa o express configurado
 
 //executa nosso arquivo de configuração de database passando a url de conexão
 require('./config/database')('localhost:27017/nodelab');
